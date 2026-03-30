@@ -27,6 +27,41 @@ namespace JsonMvcApp.Services
             }
         }
 
+        public List<Product> GetAll()
+        {
+            var json = File.ReadAllText(_filePath);
 
+            if (string.IsNullOrEmpty(json))
+            {
+                return new List<Product>();
+            }
+
+            var products = JsonSerializer.Deserialize<List<Product>>(json);
+
+            return products ?? new List<Product>(); 
+        }
+
+        public void Add(Product product)
+        {
+            var products = GetAll();
+
+            product.Id = products.Count == 0 ? 1 : products.Max(p => p.Id) + 1;
+
+            products.Add(product);
+
+            SaveAll(products);
+        }
+
+        private void SaveAll(List<Product> products)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+            };
+
+            var json = JsonSerializer.Serialize(products, options);
+
+            File.WriteAllText(_filePath, json);
+        }
     }
 }
