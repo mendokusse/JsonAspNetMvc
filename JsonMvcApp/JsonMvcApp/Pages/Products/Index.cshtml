@@ -1,0 +1,32 @@
+﻿@page
+@model JsonMvcApp.Pages.Products.IndexModel
+
+<h1>Список товаров</h1>
+@if (Model.Products.Count == 0) {
+    <p>Товаров пока нет.</p>
+}else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Название</td>
+                <td>Цена</td>
+                <td>Описание</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products){
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Name</td>
+                    <td>@product.Price</td>
+                    <td>@product.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
