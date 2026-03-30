@@ -1,4 +1,27 @@
 ﻿@page
 @model JsonMvcApp.Pages.Products.CreateModel
-@{
-}
+<h1>Добавление товара</h1>
+
+<form method="post">
+    <div>
+        <label asp-for="product.Name"></label>
+        <input asp-for="product.Name" />
+        <span asp-validation-for="product.Name" style="color: red"></span>
+    </div>
+    <div>
+        <label asp-for="product.Price"></label>
+        <input asp-for="product.Price" />
+        <span asp-validation-for="product.Price" style="color: red"></span>
+    </div>
+    <div>
+        <label asp-for="product.Description"></label>
+        <input asp-for="product.Description" />
+        <span asp-validation-for="product.Description" style="color: red"></span>
+    </div>
+
+    <button type="submit">Добавить</button>
+</form>
+
+<p>
+    <a href="/Products/Index">Назад к списку</a>
+</p>
