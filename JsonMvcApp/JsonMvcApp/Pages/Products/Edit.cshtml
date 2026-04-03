@@ -1,0 +1,30 @@
+﻿@page "{id:int}"
+@model JsonMvcApp.Pages.Products.EditModel
+
+<h1>Редактирование товара</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="Product.Id" />
+
+    <div>
+        <label asp-for="Product.Name"></label>
+        <input asp-for="Product.Name" />
+        <span asp-validation-for="Product.Name" style="color: red"></span>
+    </div>
+    <div>
+        <label asp-for="Product.Price"></label>
+        <input asp-for="Product.Price" />
+        <span asp-validation-for="Product.Price" style="color: red"></span>
+    </div>
+    <div>
+        <label asp-for="Product.Description"></label>
+        <input asp-for="Product.Description" />
+        <span asp-validation-for="Product.Description" style="color: red"></span>
+    </div>
+
+    <button type="submit">Сохранить</button>
+</form>
+
+<p>
+    <a asp-page="/Products/Index">Назад к списку</a>
+</p>
