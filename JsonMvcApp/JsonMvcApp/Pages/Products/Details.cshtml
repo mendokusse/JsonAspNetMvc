@@ -1,0 +1,24 @@
+﻿@page "{id:int}"
+@model JsonMvcApp.Pages.Products.DetailsModel
+
+<h1>Детали товара</h1>
+@if(Model.Product == null)
+{
+    <p>Товар не найден</p>
+}else
+{
+    <div>
+        <p><b>ID: </b>@Model.Product.Id</p>
+        <p><b>Название: </b>@Model.Product.Name</p>
+        <p><b>Цена: </b>@Model.Product.Price</p>
+        <p><b>Описание: </b>@Model.Product.Description</p>
+    </div>
+
+    <p>
+        <a asp-page="/Products/Edit" asp-route-id="@Model.Product.Id">Редактировать</a>
+        |
+        <a asp-page="/Products/Delete" asp-route-id="@Model.Product.Id">Удалить</a>
+        |
+        <a asp-page="/Products/Index">Назад к списку</a>
+    </p>
+}

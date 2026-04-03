@@ -13,6 +13,7 @@
                 <td>Название</td>
                 <td>Цена</td>
                 <td>Описание</td>
+                <td>Действия</td>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,11 @@
                     <td>@product.Name</td>
                     <td>@product.Price</td>
                     <td>@product.Description</td>
+                    <td>
+                        <a asp-page="/Products/Details" asp-route-id="@product.Id">Открыть</a>
+                        <a asp-page="/Products/Edit" asp-route-id="@product.Id">Редактировать</a>
+                        <a asp-page="/Products/Delete" asp-route-id="@product.Id">Удалить</a>
+                    </td>
                 </tr>
             }
         </tbody>
