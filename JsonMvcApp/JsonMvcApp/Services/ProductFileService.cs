@@ -38,7 +38,7 @@ namespace JsonMvcApp.Services
 
             var products = JsonSerializer.Deserialize<List<Product>>(json);
 
-            return products ?? new List<Product>(); 
+            return products ?? new List<Product>();
         }
 
         public void Add(Product product)
@@ -62,6 +62,40 @@ namespace JsonMvcApp.Services
             var json = JsonSerializer.Serialize(products, options);
 
             File.WriteAllText(_filePath, json);
+        }
+
+        public Product? GetById(int id)
+        {
+            var products = GetAll();
+
+            return products.FirstOrDefault(p => p.Id == id);
+        }
+
+        public bool Delete(int id)
+        {
+            var products = GetAll();
+
+            var product = products.FirstOrDefault(p => p.Id == id);
+
+            if (product == null) return false;
+
+            products.Remove(product);
+            SaveAll(products);
+            return true;
+        }
+
+        public bool Update(Product updatedProduct)
+        {
+            var products = GetAll();
+
+            var index = products.FindIndex(p=> p.Id == updatedProduct.Id);
+
+            if (index == -1) return false;
+
+            products[index] = updatedProduct;
+
+            SaveAll(products);
+            return true;
         }
     }
 }
