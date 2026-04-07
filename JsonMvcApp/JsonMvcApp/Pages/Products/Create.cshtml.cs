@@ -1,4 +1,5 @@
-﻿using JsonMvcApp.Models;
+﻿using JsonMvcApp.Data;
+using JsonMvcApp.Models;
 using JsonMvcApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,14 +8,14 @@ namespace JsonMvcApp.Pages.Products
 {
     public class CreateModel : PageModel
     {
-        private readonly ProductFileService _fileService;
+        private readonly AppDbContext _dbContext;
 
         [BindProperty]
         public Product product { get; set; } = new();
 
-        public CreateModel(ProductFileService fileService)
+        public CreateModel(AppDbContext context)
         {
-            _fileService = fileService;
+            _dbContext = context;
         }
 
         public void OnGet()
@@ -22,24 +23,17 @@ namespace JsonMvcApp.Pages.Products
 
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            if (string.IsNullOrWhiteSpace(product.Name))
-            {
-                ModelState.AddModelError("product.Name", "Название обязательно");
-            }
-
-            if (product.Price <= 0)
-            {
-                ModelState.AddModelError("product.Price", "Цена должна быть выше нуля");
-            }
-
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _fileService.Add(product);
+            _dbContext.Products.Add(product);
+
+            await _dbContext.SaveChangesAsync();
+            
             return RedirectToPage("/Products/Index");
         }
 
