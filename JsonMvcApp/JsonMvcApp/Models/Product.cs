@@ -15,5 +15,10 @@ namespace JsonMvcApp.Models
 
         [StringLength(500, ErrorMessage = "Описание не должно быть длиннее 500 символов!")]
         public string Description { get; set; }
+
+        [Display(Name = "Категория")]
+        public int CategoryId { get; set; }
+
+        public Category? Category { get; set; }
     }
 }

@@ -1,25 +1,27 @@
-﻿using JsonMvcApp.Models;
+﻿using JsonMvcApp.Data;
+using JsonMvcApp.Models;
 using JsonMvcApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Threading.Tasks;
 
 namespace JsonMvcApp.Pages.Products
 {
     public class DeleteModel : PageModel
     {
-        private readonly ProductFileService _fileService;
+        private readonly AppDbContext _dbContext;
 
         [BindProperty]
         public Product Product { get; set; } = new();
 
-        public DeleteModel(ProductFileService fileService)
+        public DeleteModel(AppDbContext context)
         {
-            _fileService = fileService;
+            _dbContext = context;
         }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
-            var product = _fileService.GetById(id);
+            var product = await _dbContext.Products.FindAsync(id);
 
             if (product == null) return NotFound();
 
@@ -28,11 +30,15 @@ namespace JsonMvcApp.Pages.Products
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            var isDeleted = _fileService.Delete(Product.Id);
+            var product = await _dbContext.Products.FindAsync(Product.Id);
 
-            if (!isDeleted) return NotFound();
+            if (product == null) return NotFound();
+
+            _dbContext.Products.Remove(product);
+
+            await _dbContext.SaveChangesAsync();
 
             return RedirectToPage("/Products/Index");
         }
