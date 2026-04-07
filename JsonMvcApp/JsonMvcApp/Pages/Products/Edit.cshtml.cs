@@ -3,52 +3,52 @@ using JsonMvcApp.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
+using JsonMvcApp.Data;
+using System.Threading.Tasks;
 
 namespace JsonMvcApp.Pages.Products
 {
     public class EditModel : PageModel
     {
-        private readonly ProductFileService _fileService;
+        private readonly AppDbContext _dbContext;
 
         [BindProperty]
         public Product Product { get; set; } = new();
 
-        public EditModel(ProductFileService fileService)
+        public EditModel(AppDbContext context)
         {
-            _fileService = fileService;
+            _dbContext = context;
         }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
-            var product = _fileService.GetById(id);
+            var product = await _dbContext.Products.FindAsync(id);
 
-            if (product == null) return NotFound();
+            if (product == null)
+            {
+                return NotFound();
+            }
 
             Product = product;
-
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            if (string.IsNullOrEmpty(Product.Name))
-            {
-                ModelState.AddModelError("Product.Name", "Название обязательно");
-            }
-
-            if (Product.Price <= 0)
-            {
-                ModelState.AddModelError("Product.Price", "Цена должна быть больше 0");
-            }
-
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            var isUpdated = _fileService.Update(Product);
+            var product = await _dbContext.Products.FindAsync(Product.Id);
 
-            if (!isUpdated) return NotFound();
+            if (product == null) return NotFound();
+
+            product.Name = Product.Name;
+            product.Description = Product.Description;
+            product.Price = Product.Price;
+
+            await _dbContext.SaveChangesAsync();
 
             return RedirectToPage("/Products/Index");
         }
