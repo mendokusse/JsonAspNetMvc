@@ -1,0 +1,36 @@
+﻿@page
+@model JsonMvcApp.Pages.Categories.IndexModel
+
+<h1>Список категорий</h1>
+@if (Model.Categories.Count == 0)
+{
+    <p>Пусто.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Название</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Id</td>
+                    <td>@category.Name</td>
+                    <td>
+                        <a asp-page="/Categories/Details" asp-route-id="@category.Id">Открыть</a>
+                        <a asp-page="/Categories/Edit" asp-route-id="@category.Id">Редактировать</a>
+                        <a asp-page="/Categories/Delete" asp-route-id="@category.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
