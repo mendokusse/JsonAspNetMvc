@@ -1,0 +1,17 @@
+﻿@page
+@model JsonMvcApp.Pages.Categories.CreateModel
+<h1>Добавление категории</h1>
+
+<form method="post">
+    <div>
+        <label asp-for="Category.Name"></label>
+        <input asp-for="Category.Name" />
+        <span asp-validation-for="Category.Name" style="color: red"></span>
+    </div>
+
+    <button type="submit">Сохранить</button>
+</form>
+
+<p>
+    <a asp-page="/Categories/Index">Назад к списку</a>
+</p>
